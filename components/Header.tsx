@@ -27,42 +27,42 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="flex gap-4 justify-between py-4 px-[5%] border-b items-center">
+    <header className="flex items-center justify-between gap-4 border-b px-[5%] py-2">
       <h2 className="text-lg font-semibold">FinTrack</h2>
       <form
         action={searchTransactions}
-        className="relative w-0 flex-1 max-w-60"
+        className="relative w-0 max-w-60 flex-1"
       >
         <input
           type="text"
           placeholder="Search transactions..."
-          className="py-2 px-4 pl-8 rounded-full w-full  border text-sm focus-visible:ring-2 focus-visible:ring-zinc-300 ring-offset-1"
+          className="w-full rounded-full border px-4 py-2 pl-8 text-sm ring-offset-1 focus-visible:ring-2 focus-visible:ring-zinc-300"
         />
-        <SearchIcon className="w-4 h-4 absolute top-1/2 left-2.5 -translate-y-1/2 text-zinc-500" />
+        <SearchIcon className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
       </form>
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setShowDropdown((curr) => !curr)}
-          className="flex  gap-2 items-center duration-300 hover:bg-zinc-100 rounded-full p-2"
+          className="flex items-center gap-2 rounded-full p-2 duration-300 hover:bg-zinc-100"
         >
           <Image
             src={profilePicture}
             alt="user profile picture"
-            className="w-8 h-8 rounded-full"
+            className="h-10 w-10 rounded-full"
           />
-          <p className="font-medium text-sm hidden sm:block">John Doe</p>
-          <ChevronDown className="w-4 h-4 -ml-1" />
+          <p className="hidden text-sm font-medium sm:block">Great Ochuko</p>
+          <ChevronDown className="-ml-1 h-4 w-4" />
         </button>
         <ul
-          className={`absolute top-[110%] bg-white p-2 duration-100 border shadow rounded-lg w-fit right-0 text-sm ${
+          className={`absolute right-0 top-[100%] w-fit min-w-full rounded-lg border bg-white p-2 text-sm shadow duration-100 ${
             showDropdown
               ? "visible opacity-100"
-              : "invisible opacity-0 -translate-y-1"
+              : "invisible -translate-y-1 opacity-0"
           }`}
         >
           <li
             role="button"
-            className="hover:bg-zinc-100 duration-300 font-medium p-2 text-left px-4 rounded-md cursor-pointer"
+            className="cursor-pointer rounded-md p-2 px-4 text-left font-medium duration-300 hover:bg-zinc-100"
           >
             Logout
           </li>
