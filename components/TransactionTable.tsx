@@ -2,7 +2,9 @@
 import { fetchTransactions } from "@/services/transactionServices";
 import {
   ChevronDown,
-  ChevronsUpDown,
+  ChevronDownIcon,
+  ChevronsUpDownIcon,
+  ChevronUpIcon,
   CircleAlert,
   ListFilterIcon,
 } from "lucide-react";
@@ -20,6 +22,11 @@ export default function TransactionTable() {
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState<{
+    col: string;
+    type: "asc" | "dsc";
+  }>({ col: "id", type: "asc" });
+  const [filterBy, setFilterBy] = useState("all");
 
   useEffect(() => {
     (async () => {
@@ -34,7 +41,74 @@ export default function TransactionTable() {
     })();
   }, []);
 
-  function handleSortBy(sort: string) {}
+  function handleSortBy(col: string) {
+    if (sortBy) {
+      if (sortBy.col === col) {
+        setSortBy({
+          col,
+          type: sortBy.type === "asc" ? "dsc" : "asc",
+        });
+      } else {
+        setSortBy({
+          col,
+          type: "asc",
+        });
+      }
+    } else {
+      setSortBy({ col, type: "dsc" });
+    }
+  }
+
+  const filteredTransactions =
+    filterBy === "all"
+      ? [...transactions]
+      : transactions.filter((tran) => tran.status === filterBy);
+
+  let sortedTransactions = filteredTransactions;
+
+  switch (sortBy.col) {
+    case "id":
+      sortedTransactions = sortedTransactions.sort((a, b) =>
+        sortBy.type === "asc"
+          ? a.id.localeCompare(b.id)
+          : b.id.localeCompare(a.id),
+      );
+      break;
+
+    case "sender":
+      sortedTransactions = sortedTransactions.sort((a, b) =>
+        sortBy.type === "asc"
+          ? a.senderName.localeCompare(b.senderName)
+          : b.senderName.localeCompare(a.senderName),
+      );
+      break;
+
+    case "sender":
+      sortedTransactions = sortedTransactions.sort((a, b) =>
+        sortBy.type === "asc"
+          ? a.senderName.localeCompare(b.senderName)
+          : b.senderName.localeCompare(a.senderName),
+      );
+      break;
+
+    case "amount":
+      sortedTransactions = sortedTransactions.sort((a, b) =>
+        sortBy.type === "asc" ? a.amount - b.amount : b.amount - a.amount,
+      );
+      break;
+
+    case "status":
+      sortedTransactions = sortedTransactions.sort((a, b) => {
+        const statusOrder = ["Completed", "Pending", "Failed"];
+        return sortBy.type === "asc"
+          ? statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+          : statusOrder.indexOf(b.status) - statusOrder.indexOf(a.status);
+      });
+      break;
+
+    default:
+      break;
+  }
 
   return (
     <div>
@@ -44,12 +118,14 @@ export default function TransactionTable() {
           <select
             name="filter"
             id="filter"
+            value={filterBy}
+            onChange={(e) => setFilterBy(e.target.value)}
             className="peer appearance-none rounded-md border p-2 px-7 text-sm ring-zinc-300 ring-offset-1 focus-visible:ring-2"
           >
             <option value="all">All</option>
-            <option value="all">Completed</option>
-            <option value="all">Pending</option>
-            <option value="all">Failed</option>
+            <option value="Completed">Completed</option>
+            <option value="Pending">Pending</option>
+            <option value="Failed">Failed</option>
           </select>
           <ListFilterIcon className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2" />
           <ChevronDown className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 peer-focus-within:rotate-180" />
@@ -65,7 +141,15 @@ export default function TransactionTable() {
                 className="flex cursor-pointer items-center gap-2 px-2 py-3 text-left text-xs font-medium uppercase tracking-wider hover:text-zinc-900"
               >
                 ID
-                <ChevronsUpDown className="h-4 w-4" />
+                {sortBy?.col === "id" ? (
+                  sortBy.type === "asc" ? (
+                    <ChevronDownIcon className="h-4 w-4" />
+                  ) : (
+                    <ChevronUpIcon className="h-4 w-4" />
+                  )
+                ) : (
+                  <ChevronsUpDownIcon className="h-4 w-4" />
+                )}
               </th>
               <th
                 scope="col"
@@ -73,7 +157,15 @@ export default function TransactionTable() {
                 className="flex cursor-pointer items-center gap-2 px-2 py-3 text-left text-xs font-medium uppercase tracking-wider hover:text-zinc-900"
               >
                 Sender
-                <ChevronsUpDown className="h-4 w-4" />
+                {sortBy?.col === "sender" ? (
+                  sortBy.type === "asc" ? (
+                    <ChevronDownIcon className="h-4 w-4" />
+                  ) : (
+                    <ChevronUpIcon className="h-4 w-4" />
+                  )
+                ) : (
+                  <ChevronsUpDownIcon className="h-4 w-4" />
+                )}
               </th>
               <th
                 scope="col"
@@ -81,7 +173,15 @@ export default function TransactionTable() {
                 className="flex cursor-pointer items-center gap-2 px-2 py-3 text-left text-xs font-medium uppercase tracking-wider hover:text-zinc-900"
               >
                 Receiver
-                <ChevronsUpDown className="h-4 w-4" />
+                {sortBy?.col === "receiver" ? (
+                  sortBy.type === "asc" ? (
+                    <ChevronDownIcon className="h-4 w-4" />
+                  ) : (
+                    <ChevronUpIcon className="h-4 w-4" />
+                  )
+                ) : (
+                  <ChevronsUpDownIcon className="h-4 w-4" />
+                )}
               </th>
               <th
                 scope="col"
@@ -89,7 +189,15 @@ export default function TransactionTable() {
                 className="flex cursor-pointer items-center gap-2 px-2 py-3 text-left text-xs font-medium uppercase tracking-wider hover:text-zinc-900"
               >
                 Amount
-                <ChevronsUpDown className="h-4 w-4" />
+                {sortBy?.col === "amount" ? (
+                  sortBy.type === "asc" ? (
+                    <ChevronDownIcon className="h-4 w-4" />
+                  ) : (
+                    <ChevronUpIcon className="h-4 w-4" />
+                  )
+                ) : (
+                  <ChevronsUpDownIcon className="h-4 w-4" />
+                )}
               </th>
               <th
                 scope="col"
@@ -97,7 +205,15 @@ export default function TransactionTable() {
                 className="flex cursor-pointer items-center gap-2 px-2 py-3 text-left text-xs font-medium uppercase tracking-wider hover:text-zinc-900"
               >
                 Status
-                <ChevronsUpDown className="h-4 w-4" />
+                {sortBy?.col === "status" ? (
+                  sortBy.type === "asc" ? (
+                    <ChevronDownIcon className="h-4 w-4" />
+                  ) : (
+                    <ChevronUpIcon className="h-4 w-4" />
+                  )
+                ) : (
+                  <ChevronsUpDownIcon className="h-4 w-4" />
+                )}
               </th>
             </tr>
           </thead>
@@ -120,7 +236,7 @@ export default function TransactionTable() {
                 </td>
               </tr>
             ) : (
-              transactions.map((transaction) => (
+              sortedTransactions.map((transaction) => (
                 <tr
                   key={transaction.id}
                   className="grid grid-cols-[1fr_2fr_2fr_1fr_1fr]"
