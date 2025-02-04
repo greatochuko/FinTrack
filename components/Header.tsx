@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import profilePicture from "@/public/david.jpg";
 import Image from "next/image";
 import { ChevronDown, SearchIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -28,7 +29,9 @@ export default function Header() {
 
   return (
     <header className="flex items-center justify-between gap-4 border-b px-[5%] py-2">
-      <h2 className="text-lg font-semibold">FinTrack</h2>
+      <Link href={"/"} className="text-lg font-semibold">
+        FinTrack
+      </Link>
       <form
         action={searchTransactions}
         className="relative w-0 max-w-60 flex-1"

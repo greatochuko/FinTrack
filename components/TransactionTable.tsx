@@ -8,6 +8,7 @@ import {
   CircleAlert,
   ListFilterIcon,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export type TransactionType = {
@@ -27,6 +28,8 @@ export default function TransactionTable() {
     type: "asc" | "dsc";
   }>({ col: "id", type: "asc" });
   const [filterBy, setFilterBy] = useState("all");
+
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -221,10 +224,10 @@ export default function TransactionTable() {
             {loading ? (
               Array(5)
                 .fill("")
-                .map((row, i) => (
+                .map((_, i) => (
                   <tr
                     key={i}
-                    className="mt-2 animate-pulse rounded-md bg-zinc-300 p-4"
+                    className="mt-2 animate-pulse rounded-md bg-zinc-300 p-5"
                     style={{ animationDelay: i * 150 + "ms" }}
                   ></tr>
                 ))
@@ -238,6 +241,7 @@ export default function TransactionTable() {
             ) : (
               sortedTransactions.map((transaction) => (
                 <tr
+                  onClick={() => router.push(`/transactions/${transaction.id}`)}
                   key={transaction.id}
                   className="grid cursor-pointer grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] duration-200 hover:bg-zinc-100"
                 >
