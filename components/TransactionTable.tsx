@@ -112,7 +112,7 @@ export default function TransactionTable() {
 
   return (
     <div>
-      <div className="flex justify-between gap-4 py-4">
+      <div className="flex items-center justify-between gap-4 py-4">
         <h2 className="text-lg font-medium">Transactions</h2>
         <div className="relative">
           <select
@@ -131,10 +131,10 @@ export default function TransactionTable() {
           <ChevronDown className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 peer-focus-within:rotate-180" />
         </div>
       </div>
-      <div className="w-full overflow-x-auto">
-        <table className="flex w-full flex-col text-sm text-zinc-700">
+      <div className="overflow-x-auto">
+        <table className="flex w-fit min-w-full flex-col gap-2 text-sm text-zinc-700">
           <thead>
-            <tr className="grid w-full grid-cols-[1fr_2fr_2fr_1fr_1fr] rounded-md bg-zinc-100">
+            <tr className="grid w-full grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] rounded-md bg-zinc-100">
               <th
                 scope="col"
                 onClick={() => handleSortBy("id")}
@@ -239,13 +239,21 @@ export default function TransactionTable() {
               sortedTransactions.map((transaction) => (
                 <tr
                   key={transaction.id}
-                  className="grid grid-cols-[1fr_2fr_2fr_1fr_1fr]"
+                  className="grid cursor-pointer grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] duration-200 hover:bg-zinc-100"
                 >
-                  <td className="px-2 py-3">{transaction.id}</td>
-                  <td className="px-2 py-3">{transaction.senderName}</td>
-                  <td className="px-2 py-3">{transaction.receiverName}</td>
-                  <td className="px-2 py-3">{transaction.amount.toFixed(2)}</td>
-                  <td className={`px-2 py-3`}>
+                  <td className="whitespace-nowrap px-2 py-3">
+                    {transaction.id}
+                  </td>
+                  <td className="whitespace-nowrap px-2 py-3">
+                    {transaction.senderName}
+                  </td>
+                  <td className="whitespace-nowrap px-2 py-3">
+                    {transaction.receiverName}
+                  </td>
+                  <td className="whitespace-nowrap px-2 py-3">
+                    {transaction.amount.toFixed(2)}
+                  </td>
+                  <td className={`whitespace-nowrap px-2 py-3`}>
                     <span
                       className={`rounded-full px-2 py-1 ${
                         transaction.status === "Completed"
