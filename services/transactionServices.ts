@@ -1,11 +1,19 @@
-export async function fetchTransactions() {
+import connectDb from "@/db/connectDB";
+import Transaction, { TransactionType } from "@/db/models/Transaction";
+
+export async function fetchTransaction(transactionId: string) {
   try {
-    const res = await fetch("/transactions.json");
-    const data = await res.json();
-    return { data, error: null };
+    await connectDb();
+    const transaction: TransactionType | null = JSON.parse(
+      JSON.stringify(await Transaction.findById(transactionId)),
+    );
+    return { transaction, error: null };
   } catch (err) {
     const error = err as Error;
     console.log("Error fetching transactions: ", error.message);
-    return { data: null, error: "An error occured fetching transactions" };
+    return {
+      transaction: null,
+      error: "An error occured fetching transactions",
+    };
   }
 }

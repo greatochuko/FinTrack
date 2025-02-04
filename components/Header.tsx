@@ -4,11 +4,14 @@ import profilePicture from "@/public/david.jpg";
 import Image from "next/image";
 import { ChevronDown, SearchIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Header() {
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("query") || "";
+
+  const [query, setQuery] = useState(searchQuery);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [query, setQuery] = useState("");
   const router = useRouter();
 
   const dropdownRef = useRef<HTMLDivElement>(null);

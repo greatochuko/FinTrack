@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export type TransactionType = {
-  id: string;
+  _id: string;
   senderName: string;
   receiverName: string;
   amount: number;

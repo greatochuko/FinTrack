@@ -1,6 +1,5 @@
 "use client";
 import { TransactionType } from "@/db/models/Transaction";
-import { fetchTransactions } from "@/services/transactionServices";
 import {
   ChevronDown,
   ChevronDownIcon,
@@ -9,7 +8,7 @@ import {
   CircleAlert,
   ListFilterIcon,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function TransactionTable() {
@@ -21,19 +20,27 @@ export default function TransactionTable() {
     type: "asc" | "dsc";
   }>({ col: "id", type: "asc" });
   const [filterBy, setFilterBy] = useState("all");
+  const searchParams = useSearchParams();
+
+  const query = searchParams.get("query");
+  console.log({ query });
 
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { data, error } = await fetchTransactions();
-      if (error !== null) {
-        setError(error);
-      } else {
-        setTransactions(data);
+      try {
+        const res = await fetch("/api/transactions");
+        const data = await res.json();
+        setTransactions(data.data);
+      } catch (err) {
+        const error = err as Error;
+        console.log("Error fetching transactions: ", error.message);
+        setError("An error occured fetching transactions");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     })();
   }, []);
 
@@ -66,8 +73,8 @@ export default function TransactionTable() {
     case "id":
       sortedTransactions = sortedTransactions.sort((a, b) =>
         sortBy.type === "asc"
-          ? a.id.localeCompare(b.id)
-          : b.id.localeCompare(a.id),
+          ? a._id.localeCompare(b._id)
+          : b._id.localeCompare(a._id),
       );
       break;
 
@@ -234,12 +241,14 @@ export default function TransactionTable() {
             ) : (
               sortedTransactions.map((transaction) => (
                 <tr
-                  onClick={() => router.push(`/transactions/${transaction.id}`)}
-                  key={transaction.id}
+                  onClick={() =>
+                    router.push(`/transactions/${transaction._id}`)
+                  }
+                  key={transaction._id}
                   className="grid cursor-pointer grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] duration-200 hover:bg-zinc-100"
                 >
                   <td className="whitespace-nowrap px-2 py-3">
-                    {transaction.id}
+                    #{transaction._id.slice(18)}
                   </td>
                   <td className="whitespace-nowrap px-2 py-3">
                     {transaction.senderName}
