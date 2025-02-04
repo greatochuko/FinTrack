@@ -4,13 +4,10 @@ import profilePicture from "@/public/profile-picture.jpg";
 import Image from "next/image";
 import { ChevronDown, SearchIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function Header() {
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("query") || "";
-
-  const [query, setQuery] = useState(searchQuery);
+export default function HeaderFallback() {
+  const [query, setQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const router = useRouter();
 
@@ -34,11 +31,7 @@ export default function Header() {
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    if (query) {
-      router.push(`/?query=${query}`);
-    } else {
-      router.push(`/`);
-    }
+    router.push(`/?query=${query}`);
   }
 
   return (

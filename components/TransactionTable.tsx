@@ -23,7 +23,6 @@ export default function TransactionTable() {
   const searchParams = useSearchParams();
 
   const query = searchParams.get("query");
-  console.log({ query });
 
   const router = useRouter();
 
@@ -31,7 +30,7 @@ export default function TransactionTable() {
     (async () => {
       setLoading(true);
       try {
-        const res = await fetch("/api/transactions");
+        const res = await fetch(`/api/transactions?query=${query}`);
         const data = await res.json();
         setTransactions(data.data);
       } catch (err) {
@@ -42,7 +41,7 @@ export default function TransactionTable() {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [query]);
 
   function handleSortBy(col: string) {
     if (sortBy) {
@@ -86,7 +85,7 @@ export default function TransactionTable() {
       );
       break;
 
-    case "sender":
+    case "receiver":
       sortedTransactions = sortedTransactions.sort((a, b) =>
         sortBy.type === "asc"
           ? a.senderName.localeCompare(b.senderName)
