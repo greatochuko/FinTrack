@@ -1,0 +1,72 @@
+[
+  {
+    "id": "TXN001",
+    "senderName": "John Doe",
+    "receiverName": "Alice Smith",
+    "amount": 250.75,
+    "status": "Completed"
+  },
+  {
+    "id": "TXN002",
+    "senderName": "Michael Johnson",
+    "receiverName": "Robert Brown",
+    "amount": 500.0,
+    "status": "Pending"
+  },
+  {
+    "id": "TXN003",
+    "senderName": "Sarah Lee",
+    "receiverName": "Emily Davis",
+    "amount": 120.0,
+    "status": "Failed"
+  },
+  {
+    "id": "TXN004",
+    "senderName": "David Wilson",
+    "receiverName": "James Taylor",
+    "amount": 780.5,
+    "status": "Completed"
+  },
+  {
+    "id": "TXN005",
+    "senderName": "Sophia Martinez",
+    "receiverName": "Olivia Anderson",
+    "amount": 95.3,
+    "status": "Pending"
+  },
+  {
+    "id": "TXN006",
+    "senderName": "Chris Evans",
+    "receiverName": "Ryan Thomas",
+    "amount": 320.0,
+    "status": "Completed"
+  },
+  {
+    "id": "TXN007",
+    "senderName": "Jessica Harris",
+    "receiverName": "Daniel Moore",
+    "amount": 215.25,
+    "status": "Failed"
+  },
+  {
+    "id": "TXN008",
+    "senderName": "Matthew Clark",
+    "receiverName": "Emma White",
+    "amount": 400.0,
+    "status": "Pending"
+  },
+  {
+    "id": "TXN009",
+    "senderName": "Linda Young",
+    "receiverName": "Mark Hall",
+    "amount": 150.9,
+    "status": "Completed"
+  },
+  {
+    "id": "TXN010",
+    "senderName": "Kevin King",
+    "receiverName": "Laura Scott",
+    "amount": 600.75,
+    "status": "Failed"
+  }
+]
