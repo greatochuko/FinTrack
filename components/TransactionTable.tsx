@@ -1,4 +1,5 @@
 "use client";
+import { TransactionType } from "@/db/models/Transaction";
 import { fetchTransactions } from "@/services/transactionServices";
 import {
   ChevronDown,
@@ -10,14 +11,6 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
-export type TransactionType = {
-  id: string;
-  senderName: string;
-  receiverName: string;
-  amount: number;
-  status: "Completed" | "Pending" | "Failed";
-};
 
 export default function TransactionTable() {
   const [transactions, setTransactions] = useState<TransactionType[]>([]);

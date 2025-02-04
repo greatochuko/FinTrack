@@ -1,13 +1,15 @@
 "use client";
-import { searchTransactions } from "@/actions/transactionActions";
 import React, { useEffect, useRef, useState } from "react";
 import profilePicture from "@/public/david.jpg";
 import Image from "next/image";
 import { ChevronDown, SearchIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [query, setQuery] = useState("");
+  const router = useRouter();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -27,18 +29,22 @@ export default function Header() {
     };
   }, []);
 
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    router.push(`/?query=${query}`);
+  }
+
   return (
     <header className="flex items-center justify-between gap-4 border-b px-[5%] py-2">
       <Link href={"/"} className="text-lg font-semibold">
         FinTrack
       </Link>
-      <form
-        action={searchTransactions}
-        className="relative w-0 max-w-60 flex-1"
-      >
+      <form onSubmit={handleSearch} className="relative w-0 max-w-60 flex-1">
         <input
           type="text"
           placeholder="Search transactions..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           className="w-full rounded-full border px-4 py-2 pl-8 text-sm ring-offset-1 focus-visible:ring-2 focus-visible:ring-zinc-300"
         />
         <SearchIcon className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
