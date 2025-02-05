@@ -5,7 +5,7 @@ export async function fetchAllTransactions(query?: string) {
   try {
     await connectDb();
     const transactions: TransactionType[] = JSON.parse(
-      JSON.stringify(await Transaction.find()),
+      JSON.stringify(await Transaction.find().sort({ createdAt: -1 })),
     );
     const filteredTransactions =
       query && query !== "null" && query !== "undefined"

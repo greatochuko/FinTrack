@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 
+export type StatusType = "Completed" | "Pending" | "Failed";
+
 export type TransactionType = {
   _id: string;
   senderName: string;
   receiverName: string;
   amount: number;
-  status: "Completed" | "Pending" | "Failed";
+  status: StatusType;
   createdAt: string;
   updatedAt: string;
 };

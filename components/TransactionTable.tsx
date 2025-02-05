@@ -20,7 +20,7 @@ export default function TransactionTable({
   const [sortBy, setSortBy] = useState<{
     col: string;
     type: "asc" | "dsc";
-  }>({ col: "id", type: "asc" });
+  }>({ col: "date", type: "asc" });
   const [filterBy, setFilterBy] = useState("all");
 
   const router = useRouter();
@@ -52,8 +52,8 @@ export default function TransactionTable({
     case "receiver":
       sortedTransactions = sortedTransactions.sort((a, b) =>
         sortBy.type === "asc"
-          ? a.senderName.localeCompare(b.senderName)
-          : b.senderName.localeCompare(a.senderName),
+          ? a.receiverName.localeCompare(b.receiverName)
+          : b.receiverName.localeCompare(a.receiverName),
       );
       break;
 
@@ -69,6 +69,14 @@ export default function TransactionTable({
         return sortBy.type === "asc"
           ? statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
           : statusOrder.indexOf(b.status) - statusOrder.indexOf(a.status);
+      });
+      break;
+
+    case "date":
+      sortedTransactions = sortedTransactions.sort((a, b) => {
+        return sortBy.type === "asc"
+          ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       });
       break;
 
@@ -118,7 +126,7 @@ export default function TransactionTable({
       <div className="overflow-x-auto">
         <table className="flex w-fit min-w-full flex-col gap-2 text-sm text-zinc-700">
           <thead>
-            <tr className="grid w-full grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] rounded-md bg-zinc-100">
+            <tr className="grid w-full grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] rounded-md bg-zinc-100">
               <th
                 scope="col"
                 onClick={() => handleSortBy("id")}
@@ -199,9 +207,25 @@ export default function TransactionTable({
                   <ChevronsUpDownIcon className="h-4 w-4" />
                 )}
               </th>
+              <th
+                scope="col"
+                onClick={() => handleSortBy("date")}
+                className="flex cursor-pointer items-center gap-2 px-2 py-3 text-left text-xs font-medium uppercase tracking-wider hover:text-zinc-900"
+              >
+                Date
+                {sortBy?.col === "date" ? (
+                  sortBy.type === "asc" ? (
+                    <ChevronDownIcon className="h-4 w-4" />
+                  ) : (
+                    <ChevronUpIcon className="h-4 w-4" />
+                  )
+                ) : (
+                  <ChevronsUpDownIcon className="h-4 w-4" />
+                )}
+              </th>
             </tr>
           </thead>
-          <tbody className="flex flex-col divide-y divide-gray-200 bg-white">
+          <tbody className="flex flex-col bg-white">
             {error ? (
               <tr className="flex h-40 items-center justify-center">
                 <td className="flex items-center gap-2">
@@ -216,7 +240,7 @@ export default function TransactionTable({
                     router.push(`/transactions/${transaction._id}`)
                   }
                   key={transaction._id}
-                  className="grid cursor-pointer grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] duration-200 hover:bg-zinc-100"
+                  className="grid cursor-pointer grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] border-b border-gray-200 duration-200 hover:bg-zinc-100"
                 >
                   <td className="whitespace-nowrap px-2 py-3">
                     #{transaction._id.slice(18)}
@@ -242,6 +266,9 @@ export default function TransactionTable({
                     >
                       {transaction.status}
                     </span>
+                  </td>
+                  <td className="whitespace-nowrap px-2 py-3">
+                    {new Date(transaction.createdAt).toLocaleDateString()}
                   </td>
                 </tr>
               ))
