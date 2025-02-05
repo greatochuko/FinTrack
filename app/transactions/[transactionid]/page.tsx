@@ -10,7 +10,6 @@ export default async function page({
   params: Promise<{ transactionId: string }>;
 }) {
   const { transactionId } = await params;
-  console.log({ transactionId });
   const { transaction, error } = await fetchTransaction(transactionId);
 
   if (error !== null) {

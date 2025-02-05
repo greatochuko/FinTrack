@@ -27,30 +27,13 @@ export async function fetchAllTransactions(query?: string) {
   }
 }
 
-// export async function fetchTransaction1(transactionId: string) {
-//   try {
-//     await connectDb();
-//     const transaction: TransactionType | null = JSON.parse(
-//       JSON.stringify(await Transaction.findOne({ _id: transactionId })),
-//     );
-//     return { transaction, error: null };
-//   } catch (err) {
-//     const error = err as Error;
-//     console.log("Error fetching transaction: ", error.message);
-//     return {
-//       transaction: null,
-//       error: `An error occured fetching transaction with ID ${transactionId}`,
-//     };
-//   }
-// }
-
 export async function fetchTransaction(transactionId: string) {
   try {
-    const BASE_URL = process.env.BASE_URL;
-    const url = `${BASE_URL}/api/transactions/${transactionId}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    return { transaction: data.data, error: null };
+    await connectDb();
+    const transaction: TransactionType | null = JSON.parse(
+      JSON.stringify(await Transaction.findById(transactionId)),
+    );
+    return { transaction, error: null };
   } catch (err) {
     const error = err as Error;
     console.log("Error fetching transaction: ", error.message);
