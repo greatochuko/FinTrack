@@ -31,7 +31,7 @@ export async function fetchTransaction(transactionId: string) {
   try {
     await connectDb();
     const transaction: TransactionType | null = JSON.parse(
-      JSON.stringify(await Transaction.findById(transactionId)),
+      JSON.stringify(await Transaction.findOne({ _id: transactionId })),
     );
     return { transaction, error: null };
   } catch (err) {
