@@ -8,7 +8,7 @@ import {
   ListFilterIcon,
 } from "lucide-react";
 import { TransactionType } from "@/db/models/Transaction";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function TransactionTable({
   transactions,
@@ -22,6 +22,8 @@ export default function TransactionTable({
     type: "asc" | "dsc";
   }>({ col: "date", type: "asc" });
   const [filterBy, setFilterBy] = useState("all");
+
+  const router = useRouter();
 
   const filteredTransactions =
     filterBy === "all"
@@ -124,7 +126,7 @@ export default function TransactionTable({
       <div className="overflow-x-auto">
         <table className="flex w-fit min-w-full flex-col gap-2 text-sm text-zinc-700">
           <thead>
-            <tr className="grid w-full grid-cols-[minmax(8rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] rounded-md bg-zinc-100">
+            <tr className="grid w-full grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] rounded-md bg-zinc-100">
               <th
                 scope="col"
                 onClick={() => handleSortBy("id")}
@@ -234,16 +236,14 @@ export default function TransactionTable({
             ) : (
               sortedTransactions.map((transaction) => (
                 <tr
+                  onClick={() =>
+                    router.push(`/transactions/${transaction._id}`)
+                  }
                   key={transaction._id}
-                  className="grid cursor-pointer grid-cols-[minmax(8rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] border-b border-gray-200 duration-200 hover:bg-zinc-100"
+                  className="grid cursor-pointer grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] border-b border-gray-200 duration-200 hover:bg-zinc-100"
                 >
-                  <td>
-                    <Link
-                      href={`/transactions/${transaction._id}`}
-                      className="block whitespace-nowrap px-2 py-3 hover:underline"
-                    >
-                      #{transaction._id.slice(14)}
-                    </Link>
+                  <td className="whitespace-nowrap px-2 py-3">
+                    #{transaction._id.slice(18)}
                   </td>
                   <td className="whitespace-nowrap px-2 py-3">
                     {transaction.senderName}
