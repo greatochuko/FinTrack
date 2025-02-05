@@ -1,65 +1,29 @@
 "use client";
-import { TransactionType } from "@/db/models/Transaction";
+import React, { useState } from "react";
 import {
-  ChevronDown,
   ChevronDownIcon,
   ChevronsUpDownIcon,
   ChevronUpIcon,
   CircleAlert,
   ListFilterIcon,
 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { TransactionType } from "@/db/models/Transaction";
+import { useRouter } from "next/navigation";
 
-export default function TransactionTable() {
-  const [transactions, setTransactions] = useState<TransactionType[]>([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+export default function TransactionTable({
+  transactions,
+  error,
+}: {
+  transactions: TransactionType[];
+  error: string | null;
+}) {
   const [sortBy, setSortBy] = useState<{
     col: string;
     type: "asc" | "dsc";
   }>({ col: "id", type: "asc" });
   const [filterBy, setFilterBy] = useState("all");
-  const searchParams = useSearchParams();
-
-  const query = searchParams.get("query");
 
   const router = useRouter();
-
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/transactions?query=${query}`);
-        const data = await res.json();
-        setTransactions(data.data);
-      } catch (err) {
-        const error = err as Error;
-        console.log("Error fetching transactions: ", error.message);
-        setError("An error occured fetching transactions");
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [query]);
-
-  function handleSortBy(col: string) {
-    if (sortBy) {
-      if (sortBy.col === col) {
-        setSortBy({
-          col,
-          type: sortBy.type === "asc" ? "dsc" : "asc",
-        });
-      } else {
-        setSortBy({
-          col,
-          type: "asc",
-        });
-      }
-    } else {
-      setSortBy({ col, type: "dsc" });
-    }
-  }
 
   const filteredTransactions =
     filterBy === "all"
@@ -112,6 +76,24 @@ export default function TransactionTable() {
       break;
   }
 
+  function handleSortBy(col: string) {
+    if (sortBy) {
+      if (sortBy.col === col) {
+        setSortBy({
+          col,
+          type: sortBy.type === "asc" ? "dsc" : "asc",
+        });
+      } else {
+        setSortBy({
+          col,
+          type: "asc",
+        });
+      }
+    } else {
+      setSortBy({ col, type: "dsc" });
+    }
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between gap-4 py-4">
@@ -130,7 +112,7 @@ export default function TransactionTable() {
             <option value="Failed">Failed</option>
           </select>
           <ListFilterIcon className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2" />
-          <ChevronDown className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 peer-focus-within:rotate-180" />
+          <ChevronDownIcon className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 peer-focus-within:rotate-180" />
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -220,17 +202,7 @@ export default function TransactionTable() {
             </tr>
           </thead>
           <tbody className="flex flex-col divide-y divide-gray-200 bg-white">
-            {loading ? (
-              Array(5)
-                .fill("")
-                .map((_, i) => (
-                  <tr
-                    key={i}
-                    className="mt-2 animate-pulse rounded-md bg-zinc-300 p-5"
-                    style={{ animationDelay: i * 150 + "ms" }}
-                  ></tr>
-                ))
-            ) : error ? (
+            {error ? (
               <tr className="flex h-40 items-center justify-center">
                 <td className="flex items-center gap-2">
                   <CircleAlert className="h-4 w-4 text-red-500" />

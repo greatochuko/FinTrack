@@ -1,9 +1,15 @@
 import AddNewTransactionBtn from "@/components/AddNewTransactionBtn";
-import TransactionTable from "@/components/TransactionTable";
+import TransactionContainer from "@/components/TransactionContainer";
 import TransactionTableFallback from "@/components/TransactionTableFallback";
 import { Suspense } from "react";
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ query?: string }>;
+}) {
+  const { query } = await searchParams;
+
   return (
     <main className="mx-auto flex w-[90%] max-w-7xl flex-1 flex-col gap-4 py-4">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -13,7 +19,7 @@ export default function Home() {
         <AddNewTransactionBtn />
       </div>
       <Suspense fallback={<TransactionTableFallback />}>
-        <TransactionTable />
+        <TransactionContainer query={query} />
       </Suspense>
     </main>
   );
