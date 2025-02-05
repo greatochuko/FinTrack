@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { TransactionType } from "@/db/models/Transaction";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function TransactionTable({
   transactions,
@@ -242,8 +243,13 @@ export default function TransactionTable({
                   key={transaction._id}
                   className="grid cursor-pointer grid-cols-[minmax(6rem,1fr)_minmax(10rem,2fr)_minmax(10rem,2fr)_minmax(6rem,1fr)_minmax(6rem,1fr)_minmax(6rem,1fr)] border-b border-gray-200 duration-200 hover:bg-zinc-100"
                 >
-                  <td className="whitespace-nowrap px-2 py-3">
-                    #{transaction._id.slice(18)}
+                  <td>
+                    <Link
+                      href={`/transactions/${transaction._id}`}
+                      className="block whitespace-nowrap px-2 py-3 hover:underline"
+                    >
+                      #{transaction._id.slice(18)}
+                    </Link>
                   </td>
                   <td className="whitespace-nowrap px-2 py-3">
                     {transaction.senderName}
