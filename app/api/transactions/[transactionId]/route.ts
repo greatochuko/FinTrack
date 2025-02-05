@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
   const transactionId = url.pathname.split("/").at(-1);
   try {
     await connectDB();
+    console.log("Transaction ID from route handler: ", transactionId);
     const transaction = await Transaction.findById(transactionId);
     return NextResponse.json({ data: transaction, error: null });
   } catch (err) {
