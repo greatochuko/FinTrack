@@ -7,9 +7,9 @@ import React from "react";
 export default async function page({
   params,
 }: {
-  params: Promise<{ transactionId: string }>;
+  params: { transactionId: string };
 }) {
-  const { transactionId } = await params;
+  const { transactionId } = params;
   const { transaction, error } = await fetchTransaction(transactionId);
 
   if (error !== null) {
