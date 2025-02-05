@@ -7,10 +7,11 @@ import React from "react";
 export default async function page({
   params,
 }: {
-  params: Promise<{ transactionId: string }>;
+  params: Promise<Record<string, string>>;
 }) {
-  const { transactionId } = await params;
-  console.log({ ID: (await params).transactionId });
+  const resolvedParams = await params;
+  const transactionId = Object.values(resolvedParams)[0];
+  console.log({ transactionId });
   const { transaction, error } = await fetchTransaction(transactionId);
 
   if (error !== null) {
