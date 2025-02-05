@@ -33,7 +33,6 @@ export async function fetchTransaction(transactionId: string) {
     const transaction: TransactionType | null = JSON.parse(
       JSON.stringify(await Transaction.findById(transactionId)),
     );
-    console.log({ transactionId, transaction });
     return { transaction, error: null };
   } catch (err) {
     const error = err as Error;

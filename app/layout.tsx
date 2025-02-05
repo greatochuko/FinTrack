@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ledger View",
+  title: "LedgerView",
   description: "View and manage you financial transactions",
 };
 
