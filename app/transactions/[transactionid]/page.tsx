@@ -11,6 +11,7 @@ export default async function page({
 }) {
   const { transactionId } = await params;
   const { transaction, error } = await fetchTransaction(transactionId);
+  console.log({ error });
 
   if (error !== null) {
     return (
